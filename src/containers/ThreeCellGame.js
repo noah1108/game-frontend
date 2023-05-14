@@ -1,6 +1,6 @@
-import React from 'react'
-import { Stage, Layer, Star, Text, Rect } from 'react-konva'
-import _ from 'lodash'
+import React, { useEffect, useState } from 'react'
+import { Stage, Layer, Rect, Text } from 'react-konva'
+import _, { uniq } from 'lodash'
 import styled from '@emotion/styled'
 
 const INITIAL_BOARD = () => {
@@ -27,46 +27,75 @@ const INITIAL_BOARD = () => {
 const ThreeCellGame = () => {
   const [stars, setStars] = React.useState(INITIAL_BOARD())
   const [board, setBorad] = React.useState(INITIAL_BOARD())
+  const [gameStatus, setGameStatus] = useState({
+    turn: null,
+    board: {},
+    result: null,
+  })
+  const [clientId, setClientId] = useState('aaaaa')
 
-  const handleDragStart = (e) => {
-    const id = e.target.id()
-    setStars(
-      stars.map((star) => {
-        return {
-          ...star,
-          isDragging: star.id === id,
-        }
-      })
+  useEffect(() => {
+    const websocket = new WebSocket(
+      `ws://localhost:3000/websocket/test?clientId=${clientId}`
     )
-  }
-  const handleDragEnd = (e) => {
-    setStars(
-      stars.map((star) => {
-        return {
-          ...star,
-          isDragging: false,
-        }
-      })
-    )
-  }
+    console.log(websocket)
+
+    setGameStatus({
+      turn: 1,
+      board: {
+        '0-0': 1,
+        '0-1': 2,
+        '0-2': 1,
+        '1-0': 2,
+        '1-1': 1,
+        '1-2': 2,
+        '2-0': 1,
+        '2-1': 2,
+        '2-2': 1,
+      },
+      result: null,
+    })
+  }, [])
+
+  const handleOnClick = (id) => {}
 
   return (
     <Stage width={320} height={320}>
       <Layer>
-        {_.map(board, (cell, idx) => {
-          const { id, x, y, width, height, fill } = cell
-          return (
-            <Rect
-              id={id}
-              x={x}
-              y={y}
-              width={width}
-              height={height}
-              fill={fill}
-              shadowBlur={5}
-            />
-          )
-        })}
+        {_.isNil(gameStatus.turn) ? (
+          <Text text="Please wait a moment before starting the game ... " />
+        ) : (
+          _.map(board, (cell, idx) => {
+            const { id, x, y, width, height, fill } = cell
+            const val = gameStatus.board[id] ?? 0
+            const disp = (() => {
+              if (val === 1) return 'X'
+              if (val === 2) return 'O'
+              return ''
+            })()
+            return (
+              <>
+                <Rect
+                  key={id}
+                  x={x}
+                  y={y}
+                  width={width}
+                  height={height}
+                  fill={fill}
+                  shadowBlur={5}
+                  onClick={() => handleOnClick(id)}
+                />
+                <Text
+                  key={`value-${id}`}
+                  x={x + 30}
+                  y={y + 30}
+                  text={disp}
+                  fontSize={50}
+                />
+              </>
+            )
+          })
+        )}
       </Layer>
     </Stage>
   )

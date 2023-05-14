@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic'
-import styled from '@emotion/styled'
 
 // react-konvaを使用しているコンポーネントはdynamic importを利用する
 const ThreeCellGame = dynamic(() => import('../containers/ThreeCellGame'), {

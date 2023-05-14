@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   // swcMinify: true,
   // hot reload されなかったため追加
   // webpack: (config) => {
