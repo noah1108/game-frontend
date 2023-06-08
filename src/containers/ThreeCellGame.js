@@ -24,6 +24,25 @@ const INITIAL_BOARD = () => {
   )
 }
 
+const createPassword = () => {
+  var alphabet = 'abcdefghijklmnopqrstuvwxyz';
+  var alphabetUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var numbers = '0123456789';
+
+  var passBase  = alphabet + alphabetUpper + numbers;
+
+  var len = 8; // 8桁
+  var password='';
+
+  for (var i = 0; i < len; i++) {
+      password += passBase.charAt(Math.floor(Math.random() * passBase.length));
+  }
+
+  return password;
+}
+
+console.log(createPassword());
+
 const ThreeCellGame = () => {
   const [stars, setStars] = React.useState(INITIAL_BOARD())
   const [board, setBorad] = React.useState(INITIAL_BOARD())
@@ -32,7 +51,7 @@ const ThreeCellGame = () => {
     board: {},
     result: null,
   })
-  const [clientId, setClientId] = useState('aaaaa')
+  const [clientId, setClientId] = useState(createPassword())
 
   useEffect(() => {
     const websocket = new WebSocket(
