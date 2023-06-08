@@ -16,18 +16,13 @@ const SocketTest = () => {
     const socket = socketIOClient(ENDPOINT)
     socket.on('test', (data) => {
       console.log(data)
-      setDataarray((prevDataarray) => {
-        prevDataarray[prevDataarray.length] = data
-        return prevDataarray
-      })
+
       setCount((prevCount) => prevCount + 1)
     })
-
     // CLEAN UP THE EFFECT
     return () => socket.disconnect()
     //
   }, [])
-
   return (
     <>
       <div>{count}</div>
