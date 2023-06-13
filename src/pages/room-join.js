@@ -1,40 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react'
-import socketIOClient from 'socket.io-client'
+import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
-import { useRouter } from 'next/router'
+import { useContext } from 'react'
+import { SocketContext } from './_app'
 
-// Socket.ioサーバ接続情報
-const ENDPOINT = 'http://192.168.0.105:7000'
-
-const SocketTest = () => {
-  //   const [msg, setMsg] = useState('')
-  const socketRef = useRef()
+/**
+ * 部屋に参加する画面(ゲスト)
+ */
+const RoomJoin = () => {
+  const [socket, setSocket] = useContext(SocketContext)
   const [username, setUsername] = useState('')
-  const [roomId, setRoomId] = useState('') 
+  const [roomId, setRoomId] = useState('')
 
-  useEffect(() => {
-    socketRef.current = socketIOClient(ENDPOINT)
-    socketRef.current.on('chat', (data) => {
-      console.log(data)
-    })
-    socketRef.current.on('room', (data) => {
-      console.log(data)
-      setRoomId(data.id)
-    })
-    // CLEAN UP THE EFFECT
-    return () => socketRef.current.disconnect()
-    //
-  }, [])
-
+  // 参加するボタン押下イベントハンドラ
   const handleOnClick = () => {
-    socketRef.current.emit('join', username, roomId)
-    // setUsername('')
+    socket.emit('join', username, roomId)
   }
 
+  // ルームID入力変更検知イベントハンドラ
   const handleOnChangeRoomId = (e) => {
     setRoomId(e.target.value)
   }
 
+  // ユーザ名入力変更検知イベントハンドラ
   const handleOnChangeUsername = (e) => {
     setUsername(e.target.value)
   }
@@ -51,4 +38,4 @@ const SocketTest = () => {
   )
 }
 
-export default SocketTest
+export default RoomJoin

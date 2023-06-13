@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from 'react'
 
-const SocketContext = createContext()
+// Socket.ioサーバ接続情報
+export const SocketContext = createContext()
 
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState()

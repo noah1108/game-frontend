@@ -1,36 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react'
-import socketIOClient from 'socket.io-client'
+import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
+import { useContext } from 'react'
+import { SocketContext } from './_app'
 import { useRouter } from 'next/router'
 
-// Socket.ioサーバ接続情報
-const ENDPOINT = 'http://192.168.0.105:7000'
-
-const SocketTest = () => {
-  //   const [msg, setMsg] = useState('')
-  const socketRef = useRef()
+/**
+ * 部屋を建てる画面(ホスト)
+ */
+const RoomSetting = () => {
+  const [socket, setSocket] = useContext(SocketContext)
   const [username, setUsername] = useState('')
-  const [roomId, setRoomId] = useState('') 
 
-  useEffect(() => {
-    socketRef.current = socketIOClient(ENDPOINT)
-    socketRef.current.on('chat', (data) => {
-      console.log(data)
-    })
-    socketRef.current.on('room', (data) => {
-      console.log(data)
-      setRoomId(data.id)
-    })
-    // CLEAN UP THE EFFECT
-    return () => socketRef.current.disconnect()
-    //
-  }, [])
-
+  // 部屋を建てるボタン押下イベントハンドラ
   const handleOnClick = () => {
-    socketRef.current.emit('create', username)
+    socket.emit('create', username)
     setUsername('')
   }
 
+  // ユーザ名入力変更検知イベントハンドラ
   const handleOnChange = (e) => {
     setUsername(e.target.value)
   }
@@ -46,4 +33,4 @@ const SocketTest = () => {
   )
 }
 
-export default SocketTest
+export default RoomSetting
