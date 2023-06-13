@@ -27,28 +27,27 @@ const RoomJoin = () => {
   }
 
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" spacing={1}>
       <Grid item>
-        <Grid container direction="row">
-          <Grid item>
-            <div>{'部屋番号:' + roomId}</div>
-          </Grid>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>部屋番号：</Grid>
           <Grid item>
             <TextField size="small" onChange={handleOnChangeRoomId} value={roomId} />
           </Grid>
         </Grid>
       </Grid>
       <Grid item>
-        <Grid container direction="row">
+        <Grid container direction="row" alignItems="center">
+          <Grid item>ユーザ名：</Grid>
           <Grid item>
             <TextField size="small" onChange={handleOnChangeUsername} value={username} />
           </Grid>
-          <Grid item>
-            <Button onClick={handleOnClick} variant="outlined">
-              参加する
-            </Button>
-          </Grid>
         </Grid>
+      </Grid>
+      <Grid item>
+        <Button onClick={handleOnClick} variant="outlined">
+        参加する
+        </Button>
       </Grid>
     </Grid>
   )

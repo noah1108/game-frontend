@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Button, TextField } from '@mui/material'
+import { Button, Grid, TextField } from '@mui/material'
 import { useContext } from 'react'
 import { SocketContext } from './_app'
-import { useRouter } from 'next/router'
 
 /**
  * 部屋を建てる画面(ホスト)
@@ -23,13 +22,21 @@ const RoomSetting = () => {
   }
 
   return (
-    <>
-      {/* <div>{'部屋番号:'+roomId}</div> */}
-      <TextField size="small" onChange={handleOnChange} value={username} />
-      <Button onClick={handleOnClick} variant="outlined">
-        部屋を建てる
-      </Button>
-    </>
+    <Grid container direction="column" spacing={1}>
+      <Grid item>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>ユーザ名：</Grid>
+          <Grid item>
+            <TextField size="small" onChange={handleOnChange} value={username} />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Button onClick={handleOnClick} variant="outlined">
+          部屋を建てる
+        </Button>
+      </Grid>
+    </Grid>
   )
 }
 

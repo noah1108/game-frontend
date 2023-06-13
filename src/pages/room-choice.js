@@ -13,7 +13,7 @@ const RoomChoice = () => {
   }
 
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" spacing={1}>
       <Grid item>
         <Button onClick={() => handleOnClick('room-join')} variant="outlined">
           参加
