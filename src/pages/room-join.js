@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, TextField } from '@mui/material'
+import { Button, TextField, Grid } from '@mui/material'
 import { useContext } from 'react'
 import { SocketContext } from './_app'
 
@@ -27,14 +27,30 @@ const RoomJoin = () => {
   }
 
   return (
-    <>
-      {/* <div>{'部屋番号:'+roomId}</div> */}
-      <TextField size="small" onChange={handleOnChangeRoomId} value={roomId} />
-      <TextField size="small" onChange={handleOnChangeUsername} value={username} />
-      <Button onClick={handleOnClick} variant="outlined">
-        参加する
-      </Button>
-    </>
+    <Grid container direction="column">
+      <Grid item>
+        <Grid container direction="row">
+          <Grid item>
+            <div>{'部屋番号:' + roomId}</div>
+          </Grid>
+          <Grid item>
+            <TextField size="small" onChange={handleOnChangeRoomId} value={roomId} />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Grid container direction="row">
+          <Grid item>
+            <TextField size="small" onChange={handleOnChangeUsername} value={username} />
+          </Grid>
+          <Grid item>
+            <Button onClick={handleOnClick} variant="outlined">
+              参加する
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   )
 }
 
