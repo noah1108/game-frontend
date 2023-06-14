@@ -1,7 +1,14 @@
-import React, { useState } from 'react'
-import { Button, TextField, Grid } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Button, TextField, Grid, Typography } from '@mui/material'
 import { useContext } from 'react'
 import { SocketContext } from './_app'
+import _ from 'lodash'
+import { useRouter } from 'next/router'
+import styled from '@emotion/styled'
+
+const TypographyErr = styled(Typography)`
+  color: red;
+`
 
 /**
  * 部屋に参加する画面(ゲスト)
@@ -10,6 +17,28 @@ const RoomJoin = () => {
   const [socket, setSocket] = useContext(SocketContext)
   const [username, setUsername] = useState('')
   const [roomId, setRoomId] = useState('')
+  const [errMsg, setErrMsg] = useState('')
+  const router = useRouter()
+
+  // ソケットイベント定義
+  useEffect(() => {
+    if (!_.isEmpty(socket)) {
+      socket.on('join', (res) => {
+        console.log(res)
+        // 正常系処理
+        if (res.status === '200') {
+          router.push({
+            pathname: 'wait',
+            query: {
+              roomId: res.data.id,
+            },
+          })
+        } else {
+          setErrMsg(res.message)
+        }
+      })
+    }
+  }, [socket])
 
   // 参加するボタン押下イベントハンドラ
   const handleOnClick = () => {
@@ -46,8 +75,11 @@ const RoomJoin = () => {
       </Grid>
       <Grid item>
         <Button onClick={handleOnClick} variant="outlined">
-        参加する
+          参加する
         </Button>
+      </Grid>
+      <Grid item>
+        <TypographyErr>{errMsg}</TypographyErr>
       </Grid>
     </Grid>
   )
