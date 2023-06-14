@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Grid, TextField } from '@mui/material'
+import { Button, Grid, TextField, Typography } from '@mui/material'
 import { useContext } from 'react'
 import { SocketContext } from './_app'
+import _ from 'lodash'
+import { useRouter } from 'next/router'
+import styled from '@emotion/styled'
+
+const TypographyErr = styled(Typography)`
+  color: red;
+`
 
 /**
  * 部屋を建てる画面(ホスト)
@@ -9,11 +16,27 @@ import { SocketContext } from './_app'
 const RoomSetting = () => {
   const [socket, setSocket] = useContext(SocketContext)
   const [username, setUsername] = useState('')
+  const [errMsg, setErrMsg] = useState('')
+  const router = useRouter()
 
   // ソケットイベント定義
   useEffect(() => {
     // 部屋建てボタン押下のレスポンスを受けての処理
-
+    if (!_.isEmpty(socket)) {
+      socket.on('create', (res) => {
+        console.log(res)
+        if(res.status === '200'){
+          router.push({
+            pathname: 'wait',
+            query: {
+              roomId: res.data.id,
+            },
+          })
+        }else{ 
+          setErrMsg(res.message)
+        }
+      })
+    }
     /**
      * 返却形式
      *  {
@@ -33,12 +56,15 @@ const RoomSetting = () => {
     // 1. レスポンスからエラーメッセージを取得
     // 2. 赤文字でエラーメッセージを表示する
     // ※ 画面遷移しない
-
-    socket.on('create', (res) => {
-
-    })
     
-  }, [])
+  }, [socket])
+
+  // const sockEvent = useMemo(() => {
+  //   if (!_.isEmpty(socket)) {
+  //     socket.on('create', (res) => {
+  //     })
+  //   }
+  // }, [socket])
 
   // 部屋を建てるボタン押下イベントハンドラ
   const handleOnClick = () => {
@@ -63,6 +89,7 @@ const RoomSetting = () => {
         </Grid>
       </Grid>
       <Grid item>
+      <TypographyErr>{errMsg}</TypographyErr>
         <Button onClick={handleOnClick} variant="outlined">
           部屋を建てる
         </Button>
