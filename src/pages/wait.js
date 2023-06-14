@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material'
 
 /**
- * ホスト 参加待ち画面
+ *  参加待ち画面
  */
 const Wait = () => {
 
